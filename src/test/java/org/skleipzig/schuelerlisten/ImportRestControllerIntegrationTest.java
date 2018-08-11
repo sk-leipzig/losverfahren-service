@@ -23,7 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @SpringBootTest
 @AutoConfigureMockMvc
 public class ImportRestControllerIntegrationTest {
-    private static final String REQUEST_URL = "/schuelerlisten";
+    private static final String REQUEST_URL = "/schuelerlisten/upload";
 
     @Autowired
     private MockMvc mockMvc;
@@ -33,12 +33,6 @@ public class ImportRestControllerIntegrationTest {
         byte[] fileBytes = Files.readAllBytes(Paths.get(this.getClass().getResource("/schuelerliste.xlsx").toURI()));
         MockMultipartFile file = new MockMultipartFile("schuelerliste", fileBytes);
 
-        mockMvc.perform(fileUpload(REQUEST_URL).file(file)).andExpect(status().isOk());
-
-        // .andExpect(jsonPath("$.powerSlices[0].deliveryQuantity", is(2400.0)))
-        // .andExpect(jsonPath("$.powerSlices[0].power", is(100)))
-        // .andExpect(jsonPath("$.powerSlices[0].powerUnit", is("UNIT_KWH_PER_HOUR")))
-        // .andExpect(jsonPath("$.powerSlices[0].deliveryQuantityUnit",
-        // is("UNIT_KWH")));
+        mockMvc.perform(fileUpload(REQUEST_URL).file(file).param("losverfahrenId", "1")).andExpect(status().isOk());
     }
 }
