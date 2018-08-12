@@ -8,12 +8,12 @@ public class KennungFactory {
     private static final Random RANDOM = new Random();
     private Set<String> kennungen = new HashSet<>();
 
-    public String createKennung(int length) {
-        StringBuffer strBuf = new StringBuffer(length);
+    public String createKennung(int losverfahrenId, int length) {
+        StringBuffer strBuf = new StringBuffer(Integer.toString(losverfahrenId));
         for (int i = 0; i < length; i++) {
             strBuf.append(Integer.toString(RANDOM.nextInt(9)));
         }
         String kennung = strBuf.toString();
-        return kennungen.add(kennung) ? kennung : createKennung(length); // eindeutig!
+        return kennungen.add(kennung) ? kennung : createKennung(losverfahrenId, length); // eindeutig!
     }
 }

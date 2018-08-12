@@ -11,5 +11,5 @@ import java.util.Collection;
 @RepositoryRestResource(collectionResourceRel = "schuelerlisten", path = "/schuelerlisten")
 public interface SchuelerListenRepository extends MongoRepository<Schuelerliste, String> {
     Schuelerliste findBySchuelerListeKennung(@Param("kennung") String kennung);
-    Collection<Schuelerliste> findAllByLosverfahrenId(@Param("losverfahrenId") String losverfahrenId);
+    Collection<Schuelerliste> findAllByLosverfahrenId(@Param("losverfahrenId") Integer losverfahrenId);
 }

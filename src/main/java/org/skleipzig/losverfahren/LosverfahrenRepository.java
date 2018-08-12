@@ -6,5 +6,5 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 @CrossOrigin(origins = "*")
 @RepositoryRestResource(collectionResourceRel = "losverfahren", path = "/losverfahren")
-public interface LosverfahrenRepository extends MongoRepository<Losverfahren, String> {
+public interface LosverfahrenRepository extends MongoRepository<Losverfahren, Integer> {
 }

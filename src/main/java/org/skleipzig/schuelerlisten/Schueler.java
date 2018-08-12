@@ -1,5 +1,6 @@
 package org.skleipzig.schuelerlisten;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,27 +12,17 @@ import org.skleipzig.kurse.Kurs;
  *
  * @author Stefan
  */
-public class Schueler {
+public class Schueler implements Serializable {
     private String kennung;
     private String klasse;
-    /**
-     * Als Schlüssel wird die Priorität (1 = Erste Wahl, 2 = Zweite Wahl, usw.)
-     * und als Wert wird {@link Kurs#getId()} verwendet.
-     */
-    private Map<Integer, String> auswahl;
 
     public Schueler() {
-        auswahl = new HashMap<>();
     }
 
     public Schueler(String kennung, String klasse) {
         this();
         this.kennung = kennung;
         this.klasse = klasse;
-    }
-
-    public void choose(int prio, String kursId) {
-        auswahl.put(prio, kursId);
     }
 
     public String getKennung() {
@@ -50,16 +41,8 @@ public class Schueler {
         this.klasse = klasse;
     }
 
-    public Map<Integer, String> getAuswahl() {
-        return auswahl;
-    }
-
-    public void setAuswahl(Map<Integer, String> auswahl) {
-        this.auswahl = auswahl;
-    }
-
     @Override
     public String toString() {
-        return "Schueler [kennung=" + kennung + ", klasse=" + klasse + ", auswahl=" + auswahl + "]";
+        return "Schueler [kennung=" + kennung + ", klasse=" + klasse + "]";
     }
 }

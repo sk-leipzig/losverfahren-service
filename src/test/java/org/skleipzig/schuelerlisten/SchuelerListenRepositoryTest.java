@@ -39,9 +39,9 @@ public class SchuelerListenRepositoryTest {
 
     @Test
     public void findBySchuelerlisteKennung() {
-        Schuelerliste schuelerliste1 = new Schuelerliste("1");
+        Schuelerliste schuelerliste1 = new Schuelerliste(1);
         schuelerliste1.add(new Schueler("123456789", "5a"));
-        Schuelerliste schuelerliste2 = new Schuelerliste("2");
+        Schuelerliste schuelerliste2 = new Schuelerliste(2);
         schuelerliste2.add(new Schueler("987654321", "5b"));
 
         schuelerListenRepository.insert(Arrays.asList(schuelerliste1, schuelerliste2));
@@ -50,15 +50,27 @@ public class SchuelerListenRepositoryTest {
     }
 
     @Test
+    public void dontFindSchuelerlisteForInvalidKennung() {
+        Schuelerliste schuelerliste1 = new Schuelerliste(1);
+        schuelerliste1.add(new Schueler("123456789", "5a"));
+        Schuelerliste schuelerliste2 = new Schuelerliste(2);
+        schuelerliste2.add(new Schueler("987654321", "5b"));
+
+        schuelerListenRepository.insert(Arrays.asList(schuelerliste1, schuelerliste2));
+        Schuelerliste schuelerliste3 = schuelerListenRepository.findBySchuelerListeKennung("6");
+        assertThat(schuelerliste3, Matchers.nullValue());
+    }
+
+    @Test
     public void findByLosverfahrenId() {
-        Schuelerliste schuelerliste1 = new Schuelerliste("1");
-        Schuelerliste schuelerliste2 = new Schuelerliste("2");
-        Schuelerliste schuelerliste3 = new Schuelerliste("2");
-        Schuelerliste schuelerliste4 = new Schuelerliste("4");
+        Schuelerliste schuelerliste1 = new Schuelerliste(1);
+        Schuelerliste schuelerliste2 = new Schuelerliste(2);
+        Schuelerliste schuelerliste3 = new Schuelerliste(2);
+        Schuelerliste schuelerliste4 = new Schuelerliste(4);
 
         schuelerListenRepository.insert(Arrays.asList(schuelerliste1, schuelerliste2, schuelerliste3, schuelerliste4));
-        Collection<Schuelerliste> schuelerliste5 = schuelerListenRepository.findAllByLosverfahrenId("2");
+        Collection<Schuelerliste> schuelerliste5 = schuelerListenRepository.findAllByLosverfahrenId(2);
         assertThat(schuelerliste5.size(), Matchers.equalTo(2));
-        assertThat(schuelerliste5, Matchers.everyItem(Matchers.hasProperty("losverfahrenId", Matchers.equalTo("2"))));
+        assertThat(schuelerliste5, Matchers.everyItem(Matchers.hasProperty("losverfahrenId", Matchers.equalTo(2))));
     }
 }

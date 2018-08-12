@@ -4,8 +4,11 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -15,6 +18,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.skleipzig.schuelerauswahl.SchuelerAuswahlRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +36,15 @@ public class FileUploadController {
 
     @Autowired
     private SchuelerListenRepository schuelerListenRepository;
+    @Autowired
+    private SchuelerAuswahlRepository schuelerAuswahlRepository;
 
     @PostMapping("/schuelerlisten/upload")
     public void handleFileUpload(@RequestParam("schuelerliste") MultipartFile file,
-                    @RequestParam("losverfahrenId") String losverfahrenId, HttpServletResponse response) {
+                                 @RequestParam("losverfahrenId") Integer losverfahrenId, HttpServletResponse response) {
 
         log.info("Empfange Schuelerliste: " + file.getName() + "[" + file.getSize() + " bytes] für Losverfahren mit id="
-                        + losverfahrenId);
+                + losverfahrenId);
         try (InputStream inputStream = file.getInputStream()) {
             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
             sendDownloadToClient("schuelerliste.xlsx", response, 7500);
@@ -49,8 +55,8 @@ public class FileUploadController {
         }
     }
 
-    private int addRandom(InputStream inputStream, OutputStream outputStream, String losverfahrenId)
-                    throws IOException {
+    private int addRandom(InputStream inputStream, OutputStream outputStream, Integer losverfahrenId)
+            throws IOException {
         Schuelerliste schuelerliste = new Schuelerliste(losverfahrenId);
         Workbook workbook = new XSSFWorkbook(inputStream);
         Sheet datatypeSheet = workbook.getSheetAt(0);
@@ -61,17 +67,20 @@ public class FileUploadController {
 
             Row currentRow = rowIterator.next();
             String klasse = currentRow.getCell(2).getStringCellValue();
-            String kennung = kennungFactory.createKennung(10);
+            String kennung = kennungFactory.createKennung(losverfahrenId, 10);
             Cell newCell = currentRow.createCell(3, CellType.STRING);
             newCell.setCellValue(kennung);
-            Schueler schueler = new Schueler(kennung, klasse);
-            schueler.choose(1, "1");
-            schuelerliste.add(schueler);
+            schuelerliste.add(new Schueler(kennung, klasse));
         }
         workbook.write(outputStream);
         workbook.close();
 
-        schuelerListenRepository.findAllByLosverfahrenId(losverfahrenId);
+        Collection<Schuelerliste> schuelerlistenToDelete = schuelerListenRepository.findAllByLosverfahrenId(losverfahrenId);
+        log.info("Lösche " + schuelerlistenToDelete.size() + " alte Schülerlisten.");
+        schuelerListenRepository.deleteAll(schuelerlistenToDelete);
+        List<Schueler> schuelerListe = schuelerlistenToDelete.stream().map(Schuelerliste::getSchuelerListe).flatMap(Collection::stream).collect(Collectors.toList());
+        log.info("Lösche " + schuelerListe.size() + " alte Auswahleinstellungen.");
+        schuelerAuswahlRepository.deleteAllBySchueler(schuelerListe);
         schuelerListenRepository.insert(schuelerliste);
         log.info("neue Schülerliste:" + schuelerliste);
 
@@ -79,7 +88,7 @@ public class FileUploadController {
     }
 
     private void sendDownloadToClient(String fileName, HttpServletResponse response, int downloadSize)
-                    throws IOException {
+            throws IOException {
         String mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
         response.setContentType(mimeType);
         response.setHeader("Content-Disposition", String.format("inline; filename=\"" + fileName + "\""));

@@ -9,14 +9,14 @@ import org.springframework.data.annotation.Id;
 public class Schuelerliste {
     @Id
     private String id;
-    private String losverfahrenId;
+    private Integer losverfahrenId;
     private List<Schueler> schuelerListe;
 
     public Schuelerliste() {
         schuelerListe = new ArrayList<>();
     }
 
-    public Schuelerliste(String losverfahrenId) {
+    public Schuelerliste(Integer losverfahrenId) {
         this();
         this.losverfahrenId = losverfahrenId;
     }
@@ -33,11 +33,11 @@ public class Schuelerliste {
         this.id = id;
     }
 
-    public String getLosverfahrenId() {
+    public Integer getLosverfahrenId() {
         return losverfahrenId;
     }
 
-    public void setLosverfahrenId(String losverfahrenId) {
+    public void setLosverfahrenId(int losverfahrenId) {
         this.losverfahrenId = losverfahrenId;
     }
 
