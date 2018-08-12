@@ -1,5 +1,10 @@
 package org.skleipzig.schuelerlisten;
 
+import static org.junit.Assert.assertThat;
+
+import java.util.Arrays;
+import java.util.Collection;
+
 import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
@@ -11,11 +16,6 @@ import org.springframework.boot.test.autoconfigure.data.mongo.AutoConfigureDataM
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.util.Arrays;
-import java.util.Collection;
-
-import static org.junit.Assert.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -32,6 +32,7 @@ public class SchuelerListenRepositoryTest {
     public void setup() throws Exception {
         mongoTemplate.dropCollection(Schuelerliste.class);
     }
+
     @After
     public void tearDown() throws Exception {
         mongoTemplate.dropCollection(Schuelerliste.class);
@@ -46,7 +47,7 @@ public class SchuelerListenRepositoryTest {
 
         schuelerListenRepository.insert(Arrays.asList(schuelerliste1, schuelerliste2));
         Schuelerliste schuelerliste3 = schuelerListenRepository.findBySchuelerListeKennung("123456789");
-        assertThat(schuelerliste3.getLosverfahrenId(), Matchers.equalTo("1"));
+        assertThat(schuelerliste3.getLosverfahrenId(), Matchers.equalTo(1));
     }
 
     @Test

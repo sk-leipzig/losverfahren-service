@@ -10,7 +10,7 @@ public class KennungFactory {
 
     public String createKennung(int losverfahrenId, int length) {
         StringBuffer strBuf = new StringBuffer(Integer.toString(losverfahrenId));
-        for (int i = 0; i < length; i++) {
+        for (int i = strBuf.length(); i < length; i++) {
             strBuf.append(Integer.toString(RANDOM.nextInt(9)));
         }
         String kennung = strBuf.toString();

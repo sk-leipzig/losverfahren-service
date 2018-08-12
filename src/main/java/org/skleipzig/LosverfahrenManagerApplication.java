@@ -3,6 +3,7 @@ package org.skleipzig;
 import org.skleipzig.kurse.Kurs;
 import org.skleipzig.losverfahren.Losverfahren;
 import org.skleipzig.losverfahren.LosverfahrenRepository;
+import org.skleipzig.schuelerauswahl.SchuelerAuswahl;
 import org.skleipzig.schuelerauswahl.SchuelerAuswahlRepository;
 import org.skleipzig.schuelerlisten.SchuelerListenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +30,10 @@ public class LosverfahrenManagerApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        repositoryRestConfiguration.exposeIdsFor(Losverfahren.class, Kurs.class);
+        repositoryRestConfiguration.exposeIdsFor(Losverfahren.class, Kurs.class, SchuelerAuswahl.class);
         /*
-        losverfahrenRepository.deleteAll();
-        schuelerListenRepository.deleteAll();
-        schuelerAuswahlRepository.deleteAll();
-        */
+         * losverfahrenRepository.deleteAll(); schuelerListenRepository.deleteAll();
+         * schuelerAuswahlRepository.deleteAll();
+         */
     }
 }

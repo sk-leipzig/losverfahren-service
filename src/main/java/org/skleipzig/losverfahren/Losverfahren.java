@@ -4,12 +4,12 @@ import java.util.List;
 
 import org.skleipzig.kurse.Kurs;
 import org.springframework.data.annotation.Id;
-import org.springframework.util.StringUtils;
 
 public class Losverfahren {
     @Id
     private Integer id;
     private String name;
+    private boolean aktiv;
     private List<Kurs> kurse;
 
     public Losverfahren() {
@@ -28,7 +28,7 @@ public class Losverfahren {
         return name;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -44,10 +44,17 @@ public class Losverfahren {
         this.kurse = kurse;
     }
 
+    public boolean isAktiv() {
+        return aktiv;
+    }
+
+    public void setAktiv(boolean aktiv) {
+        this.aktiv = aktiv;
+    }
+
     @Override
     public String toString() {
-        return "Losverfahren [id=" + id + ", name=" + name + ", kurse="
-                + StringUtils.collectionToCommaDelimitedString(kurse) + "]";
+        return "Losverfahren [id=" + id + ", name=" + name + ", aktiv=" + aktiv + ", kurse=" + kurse + "]";
     }
 
 }
