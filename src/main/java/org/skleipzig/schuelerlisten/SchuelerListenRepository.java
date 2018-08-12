@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.Collection;
 
 @CrossOrigin(origins = "*")
-@RepositoryRestResource(collectionResourceRel = "schuelerlisten", path = "/schuelerlisten")
+@RepositoryRestResource(collectionResourceRel = "schuelerlisten", path = "schuelerlisten")
 public interface SchuelerListenRepository extends MongoRepository<Schuelerliste, String> {
     Schuelerliste findBySchuelerListeKennung(@Param("kennung") String kennung);
     Collection<Schuelerliste> findAllByLosverfahrenId(@Param("losverfahrenId") Integer losverfahrenId);

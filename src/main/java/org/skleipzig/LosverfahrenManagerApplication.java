@@ -33,7 +33,7 @@ public class LosverfahrenManagerApplication implements CommandLineRunner {
         /*
         losverfahrenRepository.deleteAll();
         schuelerListenRepository.deleteAll();
-        */
         schuelerAuswahlRepository.deleteAll();
+        */
     }
 }
