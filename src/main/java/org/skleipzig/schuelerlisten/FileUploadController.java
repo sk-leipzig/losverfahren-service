@@ -65,14 +65,13 @@ public class FileUploadController {
             Cell newCell = currentRow.createCell(3, CellType.STRING);
             newCell.setCellValue(kennung);
             Schueler schueler = new Schueler(kennung, klasse);
+            schueler.choose(1, "1");
             schuelerliste.add(schueler);
         }
         workbook.write(outputStream);
         workbook.close();
 
-        schuelerListenRepository.findAll().stream()
-                        .filter(liste -> !Objects.equals(losverfahrenId, liste.getLosverfahrenId()))
-                        .forEach(schuelerListenRepository::delete);
+        schuelerListenRepository.findAllByLosverfahrenId(losverfahrenId);
         schuelerListenRepository.insert(schuelerliste);
         log.info("neue Schülerliste:" + schuelerliste);
 

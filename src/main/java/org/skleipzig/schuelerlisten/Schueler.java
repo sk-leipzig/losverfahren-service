@@ -8,16 +8,17 @@ import org.skleipzig.kurse.Kurs;
 /**
  * Ein Teilnehmer an einem Losverfahren. Speichert die Auswahl, die der
  * Teilnehmer für das Losverfahren getroffen hat.
- * 
+ *
  * @author Stefan
  */
 public class Schueler {
     private String kennung;
     private String klasse;
     /**
-     * Als Schlüssel wird {@link Kurs#getId()} verwendet.
+     * Als Schlüssel wird die Priorität (1 = Erste Wahl, 2 = Zweite Wahl, usw.)
+     * und als Wert wird {@link Kurs#getId()} verwendet.
      */
-    private Map<String, String> auswahl;
+    private Map<Integer, String> auswahl;
 
     public Schueler() {
         auswahl = new HashMap<>();
@@ -27,6 +28,10 @@ public class Schueler {
         this();
         this.kennung = kennung;
         this.klasse = klasse;
+    }
+
+    public void choose(int prio, String kursId) {
+        auswahl.put(prio, kursId);
     }
 
     public String getKennung() {
@@ -45,11 +50,11 @@ public class Schueler {
         this.klasse = klasse;
     }
 
-    public Map<String, String> getAuswahl() {
+    public Map<Integer, String> getAuswahl() {
         return auswahl;
     }
 
-    public void setAuswahl(Map<String, String> auswahl) {
+    public void setAuswahl(Map<Integer, String> auswahl) {
         this.auswahl = auswahl;
     }
 
