@@ -12,5 +12,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 public interface SchuelerListenRepository extends MongoRepository<Schuelerliste, String> {
     Schuelerliste findBySchuelerListeKennung(@Param("kennung") String kennung);
 
+    void deleteAllByLosverfahrenId(@Param("losverfahrenId") Integer losverfahrenId);
+
     Collection<Schuelerliste> findAllByLosverfahrenId(@Param("losverfahrenId") Integer losverfahrenId);
 }

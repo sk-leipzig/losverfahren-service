@@ -16,4 +16,9 @@ public class KennungFactory {
         String kennung = strBuf.toString();
         return kennungen.add(kennung) ? kennung : createKennung(losverfahrenId, length); // eindeutig!
     }
+
+    public void addExisting(String kennung) {
+        if (!kennungen.add(kennung))
+            throw new IllegalStateException("Doppelte Kennung: " + kennung);
+    }
 }

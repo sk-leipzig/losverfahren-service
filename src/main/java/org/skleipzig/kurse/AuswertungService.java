@@ -1,6 +1,7 @@
 package org.skleipzig.kurse;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +18,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AuswertungService {
-    public Map<String, String> auswertung(Losverfahren losverfahren, List<SchuelerAuswahl> schuelerAuswahlListe,
+    public Map<String, String> auswertung(Losverfahren losverfahren, Collection<SchuelerAuswahl> schuelerAuswahlListe,
                     List<Schueler> schuelerListe) {
         Map<String, String> ergebnis = new HashMap<>();
 

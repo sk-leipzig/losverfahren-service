@@ -24,6 +24,7 @@ import org.skleipzig.losverfahren.Losverfahren;
 import org.skleipzig.losverfahren.LosverfahrenRepository;
 import org.skleipzig.schuelerauswahl.SchuelerAuswahl;
 import org.skleipzig.schuelerauswahl.SchuelerAuswahlRepository;
+import org.skleipzig.schuelerlisten.FileUploadController;
 import org.skleipzig.schuelerlisten.Schueler;
 import org.skleipzig.schuelerlisten.SchuelerListenRepository;
 import org.skleipzig.schuelerlisten.Schuelerliste;
@@ -79,8 +80,8 @@ public class ErgebnisService {
             throw new IllegalStateException("Mehr als eine Schüerliste für Losverfahren " + losverfahren.getName());
         else
             schuelerliste = schuelerlisten.iterator().next().getSchuelerListe();
-        List<SchuelerAuswahl> schuelerAuswahlListe = schuelerAuswahlRepository.findAll().stream()
-                        .filter(auswahl -> schuelerliste.contains(auswahl.getSchueler())).collect(Collectors.toList());
+        Collection<SchuelerAuswahl> schuelerAuswahlListe = schuelerAuswahlRepository
+                        .findAllByLosverfahrenId(losverfahrenId);
 
         Map<String, List<String>> schuelerAuswahl = schuelerAuswahlListe.stream().collect(
                         Collectors.toMap(auswahl -> auswahl.getSchueler().getKennung(), SchuelerAuswahl::getAuswahl));
@@ -93,7 +94,7 @@ public class ErgebnisService {
 
         while (rowIterator.hasNext()) {
             Row currentRow = rowIterator.next();
-            String kennung = currentRow.getCell(KENNUNG_COLUMN_INDEX).getStringCellValue();
+            String kennung = FileUploadController.readStringFromCell(currentRow.getCell(KENNUNG_COLUMN_INDEX));
             log.info("Suche Eintrag für Kennung " + kennung);
             currentRow.createCell(KENNUNG_COLUMN_INDEX + 1, CellType.STRING).setCellValue(auswertung.get(kennung));
             log.info("gewählt: " + auswertung.get(kennung));
